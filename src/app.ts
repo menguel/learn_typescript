@@ -61,7 +61,7 @@ function fisrt<Type>(arg: Type[]): Type { // Définir le type d'élément à ret
     return arg[0]
 }
 
-function consoleSize <Type extends {length: number}>(arg: Type): Type { // extend est une contrainte, elles permettent de forcer le type de retour 
+function consoleSize <Type extends {length: number}>(arg: Type): Type { // extend est une contrainte, elles permettent de forcer le type de retour. Dans ce cas l'élément de retour dois avoir un attribut length
     console.log(arg.length);
     return arg
 }
