@@ -1,50 +1,94 @@
 "use strict";
-const a = "hello world";
-const n = 10;
-const b = true;
-const d = null;
-const arr = ['aze', 'aa', 3];
-const user = { firstname: 'John', lastname: 'Doe' }; // Pour utiliser une infinité de clé 
-const data = new Date(); // Pour de type spécifique 
-const cb = (e) => {
-    return 3;
-};
-// const compteur = document.querySelector('#compteur') as HTMLButtonElement // Pour attribuer un type à Element 
-function printId(id) {
-    console.log(id.toString());
+function reverse(arr) {
+    return [...arr].reverse(); // On ne modifie pas le tableau original on crée un nouveau tableau 
 }
-const compteur = document.querySelector('#compteur');
-let i = 0; // let pour initialier des variable qui vont être incrémentées
-const increment = (e) => {
-    e.preventDefault();
-    i++;
-    const span = compteur === null || compteur === void 0 ? void 0 : compteur.querySelector('span');
-    if (span) {
-        span.innerText = i.toString();
-    }
-};
-compteur === null || compteur === void 0 ? void 0 : compteur.addEventListener('click', increment);
-/* Type Narrowing */
-function printId2(id) {
-    if (typeof id === "number") {
-        console.log((id * 3).toString()); // Tailwin dévine directement que l'on traite avec des nombres
-    }
-    else {
-        console.log(id.toUpperCase());
+class A {
+    a = 3; // propriété privée, la propriété n'est accessible que dans la classe, elle accessible dans les méthodes de la classe
+    b = 4; // Un peu comme private mais accessible dans les classes qui héritent de la classe
+    c = 5; // accessible partout
+    #d = 6; // propriété privé au sens propre du terme étant donné que private n'est pas vraiment privé 
+    log() {
+        console.log(this.a);
     }
 }
-const date = "2022-01-01";
-const id1 = 123;
-const users = { firstname: "John", lastname: "Doe" };
-function identity(arg) {
-    return arg;
+class B extends A {
+    log() {
+        console.log(this.b);
+    }
 }
-function fisrt(arg) {
-    return arg[0];
+class C {
+    a;
+    constructor(a) {
+        this.a = a;
+    }
 }
-function consoleSize(arg) {
-    console.log(arg.length);
-    return arg;
+class Collection {
+    items;
+    constructor(items) {
+        this.items = items;
+    }
+    first() {
+        return this.items[0] || null;
+    }
+    add(item) {
+        this.items.push(item);
+        return this;
+    }
+    isEqual(a) {
+        return a.items === this.items;
+    }
 }
-const aa1 = consoleSize([1, 2, 3]);
-const a1 = identity(3);
+class SubCollection extends Collection {
+    a = 3;
+}
+const a = new SubCollection(["azer", 2, 3]);
+const b = new Collection([1, 2, 3]);
+// a.isEqual(b) 
+// const b = a.first()
+// const c = new C(5);
+// const aInstance = new A();
+// console.log(aInstance.c);
+class Subscriber {
+    on = (name, cb) => {
+    };
+}
+/* Comparaison entre les classes */
+class Point {
+    x = 0;
+    y = 0;
+}
+class Geometrie {
+    x = 0;
+    y = 0;
+    surface = 0;
+}
+function getX(p) {
+    return p.x;
+}
+getX(new Geometrie()); // Doctyping getx s'attend à quelque chose qui a une proprité x et y
+/* Abstraion */
+class Polygone {
+    static x = 0;
+    y = 0;
+}
+class Triangle extends Polygone {
+    x = 2;
+    y = 2;
+    surface() {
+        return this.x * this.y / 2;
+    }
+}
+/* Si l'on a des méthode qui reçoivent en paramètre des noms de classes et qui font certaines opérations il est intéréssant de créer
+des types Instatiable... pour pouvoir correspondre les classes qui auraient des formes différentes mais qui ont des méthodes qu'on attend
+*/
+class Rectangle {
+    constructor(x, y) {
+    }
+    surface() {
+        return 3;
+    }
+}
+function shapeGenerator(shapeType, x, y) {
+    return new shapeType(x, y).surface(); // On peut utiliser shapeType comme une fonction constructeur
+}
+shapeGenerator(Triangle, 2, 3);
